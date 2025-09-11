@@ -5,18 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeatWave</title>
-    <link rel="icon" href="https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico">
+    
+    <!-- Favicon: optional, host locally to avoid timeout -->
+    <link rel="icon" href="img/favicon.ico">
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="utility.css">
 </head>
 
 <body>
     <div class="container flex" style="height: 100vh;">
-        <!-- Left sidebar -->
+        <!-- Left Sidebar -->
         <div class="left border m1">
             <div class="Home flex border m1" style="background-color: #1e1e1e; padding-left: 20px;">
                 <div class="logo">
-                    <img class="filter" src="img/logo.svg" alt="">
+                    <img class="filter" src="img/logo.svg" alt="Logo">
                 </div>
                 <div class="home flex align-item" style="gap: 15px;">
                     <img class="filter" src="img/home.svg" alt="">
@@ -35,7 +38,7 @@
                     <span>Your Library</span>
                 </div>
                 <div class="songlists">
-                    <ul></ul>
+                    <ul></ul> <!-- JS will populate this -->
                 </div>
                 <div class="footer">
                     <div><a href="https://www.spotify.com/in-en/legal/"><span>Legal</span></a></div>
@@ -48,12 +51,12 @@
             </div>
         </div>
 
-        <!-- Right main section -->
+        <!-- Right Main Section -->
         <div class="right border m1">
             <div class="navbar">
                 <div class="arrows">
-                    <img class="filter hamburger" src="img/hamburger.svg" alt="">
-                    <!-- SVG arrows -->
+                    <img class="filter hamburger" src="img/hamburger.svg" alt="Menu">
+                    <!-- SVG arrows for back/forward -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
                         <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -67,9 +70,10 @@
                 </div>
             </div>
 
+            <!-- Playlists / Albums -->
             <div class="spotifyplaylists">
                 <h1 style="padding-left: 4px;">Spotify Playlists</h1>
-                <div class="cards"></div>
+                <div class="cards"></div> <!-- JS will populate this -->
             </div>
 
             <!-- Playbar -->
@@ -77,18 +81,16 @@
                 <div class="songinfoanddur">
                     <div class="songinfo">song</div>
                     <div class="volduration">
-                        <img src="img/vol.svg" alt="">
-                        <div class="volume"><input type="range"></div>
+                        <img src="img/vol.svg" alt="Volume">
+                        <div class="volume"><input type="range" min="0" max="100" value="50"></div>
                         <div class="duration">00:00/00:00</div>
                     </div>
                 </div>
-
                 <div class="playbuttons">
-                    <img id="prev" src="img/prev.svg" alt="">
-                    <img id="pause" src="img/pause.svg" alt="">
-                    <img id="next" src="img/next.svg" alt="">
+                    <img id="prev" src="img/prev.svg" alt="Previous">
+                    <img id="pause" src="img/pause.svg" alt="Play/Pause">
+                    <img id="next" src="img/next.svg" alt="Next">
                 </div>
-
                 <div class="seekbar">
                     <div class="circle"></div>
                 </div>
@@ -96,7 +98,7 @@
         </div>
     </div>
 
-    <!-- Script -->
+    <!-- JS -->
     <script src="script.js"></script>
 </body>
 </html>
