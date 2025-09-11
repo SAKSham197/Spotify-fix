@@ -2,103 +2,102 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeatWave</title>
-    
-    <!-- Favicon: optional, host locally to avoid timeout -->
-    <link rel="icon" href="img/favicon.ico">
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="utility.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify</title>
+  <link rel="icon" href="https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="utility.css">
 </head>
 
 <body>
-    <div class="container flex" style="height: 100vh;">
-        <!-- Left Sidebar -->
-        <div class="left border m1">
-            <div class="Home flex border m1" style="background-color: #1e1e1e; padding-left: 20px;">
-                <div class="logo">
-                    <img class="filter" src="img/logo.svg" alt="Logo">
-                </div>
-                <div class="home flex align-item" style="gap: 15px;">
-                    <img class="filter" src="img/home.svg" alt="">
-                    <span>Home</span>
-                </div>
-                <div class="search flex align-item" style="gap: 15px;">
-                    <img class="filter" src="img/search.svg" alt="">
-                    <span>Search</span>
-                </div>
-                <img class="filter cross" src="img/cross.svg" alt="">
-            </div>
-
-            <div class="library border m1" style="background-color: #1e1e1e;">
-                <div class="heading">
-                    <img class="filter" src="img/playlist.svg" alt="">
-                    <span>Your Library</span>
-                </div>
-                <div class="songlists">
-                    <ul></ul> <!-- JS will populate this -->
-                </div>
-                <div class="footer">
-                    <div><a href="https://www.spotify.com/in-en/legal/"><span>Legal</span></a></div>
-                    <div><a href="https://www.spotify.com/in-en/safetyandprivacy/"><span>Safety & Privacy Center</span></a></div>
-                    <div><a href="https://www.spotify.com/in-en/legal/privacy-policy/"><span>Privacy Policy</span></a></div>
-                    <div><a href="https://www.spotify.com/in-en/legal/cookies-policy/"><span>Cookies</span></a></div>
-                    <div><a href="https://www.spotify.com/in-en/legal/privacy-policy/#s3"><span>About Ads</span></a></div>
-                    <div><a href="https://www.spotify.com/in-en/accessibility/"><span>Accessibility</span></a></div>
-                </div>
-            </div>
+  <div class="container flex" style="height: 100vh;">
+    <!-- Left Sidebar -->
+    <div class="left border m1">
+      <div class="Home flex border m1" style="background-color: #1e1e1e; padding-left: 20px;">
+        <div class="logo">
+          <img class="filter" src="img/logo.svg" alt="Logo">
         </div>
-
-        <!-- Right Main Section -->
-        <div class="right border m1">
-            <div class="navbar">
-                <div class="arrows">
-                    <img class="filter hamburger" src="img/hamburger.svg" alt="Menu">
-                    <!-- SVG arrows for back/forward -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
-                        <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
-                        <path d="M9.00005 6C9.00005 6 15 10.4189 15 12C15 13.5812 9 18 9 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="buttons">
-                    <button class="signupbtn">Sign up</button>
-                    <button class="loginbtn">Login</button>
-                </div>
-            </div>
-
-            <!-- Playlists / Albums -->
-            <div class="spotifyplaylists">
-                <h1 style="padding-left: 4px;">Spotify Playlists</h1>
-                <div class="cards"></div> <!-- JS will populate this -->
-            </div>
-
-            <!-- Playbar -->
-            <div class="playbar" style="background-color: #c8c5c5db; margin-top: 25px;">
-                <div class="songinfoanddur">
-                    <div class="songinfo">song</div>
-                    <div class="volduration">
-                        <img src="img/vol.svg" alt="Volume">
-                        <div class="volume"><input type="range" min="0" max="100" value="50"></div>
-                        <div class="duration">00:00/00:00</div>
-                    </div>
-                </div>
-                <div class="playbuttons">
-                    <img id="prev" src="img/prev.svg" alt="Previous">
-                    <img id="pause" src="img/pause.svg" alt="Play/Pause">
-                    <img id="next" src="img/next.svg" alt="Next">
-                </div>
-                <div class="seekbar">
-                    <div class="circle"></div>
-                </div>
-            </div>
+        <div class="home flex align-item" style="gap: 15px;">
+          <img class="filter" src="img/home.svg" alt="Home">
+          <span>Home</span>
         </div>
+        <div class="search flex align-item" style="gap: 15px;">
+          <img class="filter" src="img/search.svg" alt="Search">
+          <span>Search</span>
+        </div>
+        <img class="filter cross" src="img/cross.svg" alt="Close">
+      </div>
+
+      <div class="library border m1" style="background-color: #1e1e1e;">
+        <div class="heading">
+          <img class="filter" src="img/playlist.svg" alt="Playlist">
+          <span>Your library</span>
+        </div>
+        <div class="songlists">
+          <ul></ul>
+        </div>
+        <div class="footer">
+          <div><a href="https://www.spotify.com/in-en/legal/"><span>Legal</span></a></div>
+          <div><a href="https://www.spotify.com/in-en/safetyandprivacy/"><span>Safety &amp; Privacy Center</span></a></div>
+          <div><a href="https://www.spotify.com/in-en/legal/privacy-policy/"><span>Privacy Policy</span></a></div>
+          <div><a href="https://www.spotify.com/in-en/legal/cookies-policy/"><span>Cookies</span></a></div>
+          <div><a href="https://www.spotify.com/in-en/legal/privacy-policy/#s3"><span>About Ads</span></a></div>
+          <div><a href="https://www.spotify.com/in-en/accessibility/"><span>Accessibility</span></a></div>
+        </div>
+      </div>
     </div>
 
-    <!-- JS -->
-    <script src="script.js"></script>
+    <!-- Right Content -->
+    <div class="right border m1">
+      <!-- Navbar -->
+      <div class="navbar">
+        <div class="arrows">
+          <img class="filter hamburger" src="img/hamburger.svg" alt="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+            <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+            <path d="M9.00005 6C9.00005 6 15 10.4189 15 12C15 13.5812 9 18 9 18" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="buttons">
+          <button class="signupbtn">Sign up</button>
+          <button class="loginbtn">Login</button>
+        </div>
+      </div>
+
+      <!-- Playlists -->
+      <div class="spotifyplaylists">
+        <h1 style="padding-left: 4px;">Spotify Playlists</h1>
+        <div class="cards"></div>
+      </div>
+
+      <!-- Playbar -->
+      <div class="playbar" style="background-color: #c8c5c5db; margin-top: 25px;">
+        <div class="songinfoanddur">
+          <div class="songinfo">song</div>
+          <div class="volduration">
+            <img src="img/vol.svg" alt="Volume">
+            <div class="volume"><input type="range"></div>
+            <div class="duration">00:00/00:00</div>
+          </div>
+        </div>
+        <div class="playbuttons">
+          <img id="prev" src="img/prev.svg" alt="Prev">
+          <img id="pause" src="img/pause.svg" alt="Pause">
+          <img id="next" src="img/next.svg" alt="Next">
+        </div>
+        <div class="seekbar">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
+
 </html>
