@@ -1,17 +1,30 @@
-let currentsong = new Audio();
+/* ================= STATE ================= */
+let audio = new Audio();
 let songs = [];
-let currfolder = "";
+let currentFolder = "";
+let currentIndex = -1;
 
-/* -------------------- UTILS -------------------- */
-function secondsToMinutesSeconds(seconds) {
-    if (isNaN(seconds)) return "00:00";
-    let m = Math.floor(seconds / 60);
-    let s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
+/* ================= DOM ================= */
+const pauseBtn = document.getElementById("pause");
+const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev");
+const volumeSlider = document.querySelector(".volume input");
+const volumeIcon = document.querySelector(".volduration img");
+const hamburger = document.querySelector(".hamburger");
+const cross = document.querySelector(".cross");
+const songInfo = document.querySelector(".songinfo");
+const songListUL = document.querySelector(".songlists ul");
+
+/* ================= UTILS ================= */
+function formatTime(sec) {
+    if (isNaN(sec)) return "00:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-/* -------------------- PLAYLISTS -------------------- */
-const albumsList = [
+/* ================= ALBUM LIST ================= */
+const albums = [
     "Sigma mood",
     "Happy mood",
     "Fresh vibes",
@@ -24,26 +37,48 @@ const albumsList = [
     "Imagine dragons"
 ];
 
-/* -------------------- LOAD SONGS -------------------- */
-async function getsongs(folder) {
-    currfolder = folder;
+/* ================= CORE PLAYBACK ================= */
+function playByIndex(index) {
+    if (index < 0 || index >= songs.length) return;
+
+    currentIndex = index;
+    audio.src = `songs/${currentFolder}/${songs[index]}`;
+    audio.play().catch(() => {});
+    pauseBtn.src = "img/play.svg";
+    songInfo.innerText = songs[index];
+
+    updateActiveSong();
+}
+
+function updateActiveSong() {
+    document.querySelectorAll(".songlists li").forEach(li => {
+        li.classList.remove("active");
+        li.querySelector("img:last-child").src = "img/pause.svg";
+    });
+
+    const active = document.querySelector(
+        `.songlists li[data-index="${currentIndex}"]`
+    );
+    if (active) {
+        active.classList.add("active");
+        active.querySelector("img:last-child").src = "img/play.svg";
+    }
+}
+
+/* ================= LOAD SONGS ================= */
+async function loadSongs(folder) {
+    currentFolder = folder;
+    songs = [];
+
+    songListUL.innerHTML = "";
 
     const res = await fetch(`songs/${folder}/info.json`);
     const data = await res.json();
+    songs = data.songs;
 
-    if (!data.songs || data.songs.length === 0) {
-        console.error("No songs found in", folder);
-        return;
-    }
-
-    songs = data.songs.map(song => `songs/${folder}/${song}`);
-
-    const songlists = document.querySelector(".songlists ul");
-    songlists.innerHTML = "";
-
-    data.songs.forEach(song => {
-        songlists.innerHTML += `
-            <li>
+    songs.forEach((song, i) => {
+        songListUL.innerHTML += `
+            <li data-index="${i}">
                 <img class="filter" src="img/music.svg">
                 <div class="info">
                     <div class="songname">${song}</div>
@@ -56,37 +91,21 @@ async function getsongs(folder) {
 
     document.querySelectorAll(".songlists li").forEach(li => {
         li.addEventListener("click", () => {
-            const track = li.querySelector(".songname").innerText;
-            playMusic(track);
-            updateListIcons(li);
+            playByIndex(Number(li.dataset.index));
         });
     });
+
+    // Load a random song automatically
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    playByIndex(randomIndex);
 }
 
-/* -------------------- PLAY MUSIC -------------------- */
-function playMusic(track) {
-    if (!track) return;
-
-    currentsong.src = `songs/${currfolder}/${track}`;
-    currentsong.play().catch(() => {}); // ignore autoplay restriction
-    pause.src = "img/play.svg";
-    document.querySelector(".songinfo").innerText = track;
-}
-
-/* -------------------- UPDATE ICONS -------------------- */
-function updateListIcons(activeLi) {
-    document.querySelectorAll(".songlists li").forEach(li => {
-        li.querySelector("img:last-child").src = "img/pause.svg";
-    });
-    activeLi.querySelector("img:last-child").src = "img/play.svg";
-}
-
-/* -------------------- DISPLAY ALBUMS -------------------- */
-async function displayalbum() {
+/* ================= ALBUMS ================= */
+async function loadAlbums() {
     const cards = document.querySelector(".cards");
     cards.innerHTML = "";
 
-    for (const folder of albumsList) {
+    for (const folder of albums) {
         const res = await fetch(`songs/${folder}/info.json`);
         const data = await res.json();
 
@@ -99,67 +118,84 @@ async function displayalbum() {
         `;
     }
 
+    // Attach event listeners to cards
+    attachCardListeners();
+}
+
+function attachCardListeners() {
     document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", async () => {
-            await getsongs(card.dataset.folder);
-
-            const firstSong =
-                document.querySelector(".songlists li .songname");
-
-            if (firstSong) {
-                playMusic(firstSong.innerText);
-                updateListIcons(firstSong.closest("li"));
-            }
+        card.addEventListener("click", () => {
+            loadSongs(card.dataset.folder);
         });
     });
 }
 
-/* -------------------- MAIN -------------------- */
-async function main() {
-    await getsongs("Sigma mood");
-    document.querySelector(".songinfo").innerText = "Select a song";
-    displayalbum();
+/* ================= CONTROLS ================= */
+pauseBtn.addEventListener("click", () => {
+    if (currentIndex === -1) return;
 
-    pause.addEventListener("click", () => {
-        if (currentsong.paused) {
-            currentsong.play().catch(() => {});
-            pause.src = "img/play.svg";
-        } else {
-            currentsong.pause();
-            pause.src = "img/pause.svg";
-        }
-    });
+    if (audio.paused) {
+        audio.play().catch(() => {});
+        pauseBtn.src = "img/play.svg";
+    } else {
+        audio.pause();
+        pauseBtn.src = "img/pause.svg";
+    }
+});
 
-    next.addEventListener("click", () => {
-        let index = songs.indexOf(currentsong.src);
-        if (index < songs.length - 1) {
-            playMusic(songs[index + 1].split(`/songs/${currfolder}/`)[1]);
-        }
-    });
+nextBtn.addEventListener("click", () => {
+    if (songs.length === 0) return;
+    const nextIdx = (currentIndex + 1) % songs.length;
+    playByIndex(nextIdx);
+});
 
-    prev.addEventListener("click", () => {
-        let index = songs.indexOf(currentsong.src);
-        if (index > 0) {
-            playMusic(songs[index - 1].split(`/songs/${currfolder}/`)[1]);
-        }
-    });
+prevBtn.addEventListener("click", () => {
+    if (songs.length === 0) return;
+    const prevIdx = (currentIndex - 1 + songs.length) % songs.length;
+    playByIndex(prevIdx);
+});
 
-    currentsong.addEventListener("timeupdate", () => {
-        document.querySelector(".duration").innerText =
-            `${secondsToMinutesSeconds(currentsong.currentTime)} / ${secondsToMinutesSeconds(currentsong.duration)}`;
+/* ================= PROGRESS ================= */
+audio.addEventListener("timeupdate", () => {
+    document.querySelector(".duration").innerText =
+        `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
 
-        document.querySelector(".circle").style.left =
-            `${(currentsong.currentTime / currentsong.duration) * 100 || 0}%`;
-    });
+    document.querySelector(".circle").style.left =
+        `${(audio.currentTime / audio.duration) * 100 || 0}%`;
+});
 
-    document.querySelector(".seekbar").addEventListener("click", e => {
-        const percent = e.offsetX / e.target.clientWidth;
-        currentsong.currentTime = percent * currentsong.duration;
-    });
+document.querySelector(".seekbar").addEventListener("click", e => {
+    audio.currentTime =
+        (e.offsetX / e.target.clientWidth) * audio.duration;
+});
 
-    document.querySelector(".volume input").addEventListener("input", e => {
-        currentsong.volume = e.target.value / 100;
-    });
-}
+/* ================= VOLUME ================= */
+volumeSlider.addEventListener("input", e => {
+    audio.volume = e.target.value / 100;
+    volumeIcon.src = audio.volume === 0 ? "img/mute.svg" : "img/vol.svg";
+});
 
-main();
+volumeIcon.addEventListener("click", () => {
+    if (audio.volume > 0) {
+        audio.volume = 0;
+        volumeSlider.value = 0;
+        volumeIcon.src = "img/mute.svg";
+    } else {
+        audio.volume = 0.1;
+        volumeSlider.value = 10;
+        volumeIcon.src = "img/vol.svg";
+    }
+});
+
+/* ================= SIDEBAR ================= */
+hamburger.addEventListener("click", () => {
+    document.querySelector(".left").style.left = "0%";
+});
+
+cross.addEventListener("click", () => {
+    document.querySelector(".left").style.left = "-200%";
+});
+
+/* ================= INIT ================= */
+loadSongs("Sigma mood");
+loadAlbums();
